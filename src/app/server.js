@@ -157,6 +157,10 @@ function runApp() {
 
   fetchDefaultChannelDetails((channelError, channelRes, channelData) => {
     portal.server = app.listen(envHelper.PORTAL_PORT, () => {
+		  console.log("result.response server.js %j", channelRes);
+            console.log("channelData server.js", channelRes.result.response.content[0].identifier);
+            var identifier = channelRes.result.response.content[0].identifier;
+            process.env.identifier = identifier;
       envHelper.defaultChannelId = _.get(channelData, 'result.response.content[0].hashTagId'); // needs to be added in envVariable file
       logger.info({ msg: `app running on port ${envHelper.PORTAL_PORT}` })
     })
