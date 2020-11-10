@@ -6,5 +6,5 @@ COPY --chown=sunbird /src/app/app_dist/ /home/sunbird/app_dist/
 USER sunbird
 WORKDIR /home/sunbird/app_dist
 RUN mkdir -p /app
-EXPOSE 3000
+EXPOSE 3011
 CMD ["node", "server.js", "&"]
