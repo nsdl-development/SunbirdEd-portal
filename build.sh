@@ -23,7 +23,8 @@ npm set progress=false
 npm install  --unsafe-perm
 npm run deploy
 cd app_dist
-npm i -g npm@3.10.10
+# npm i -g npm@3.10.10 // Original code
+npm i -g npm@5.5.1 # Added this to fix the npm error
 npm install --production  --unsafe-perm
 sed -i "/version/a\  \"buildHash\": \"${commit_hash}\"," package.json
 echo 'Compressing assets directory'
