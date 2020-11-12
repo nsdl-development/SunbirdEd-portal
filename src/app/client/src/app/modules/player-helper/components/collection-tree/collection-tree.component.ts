@@ -36,9 +36,9 @@ export class CollectionTreeComponent implements OnInit, OnChanges, OnDestroy {
     '1': 'fancy-tree-blue',
     '2': 'fancy-tree-green'
   };
+  isOffline: boolean = environment.isOffline;
   public commingSoonMessage: string;
   public unsubscribe$ = new Subject<void>();
-  isOffline: boolean = environment.isOffline;
   isConnected = navigator.onLine;
   status = this.isConnected ? 'ONLINE' : 'OFFLINE';
 

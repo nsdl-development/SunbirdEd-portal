@@ -21,18 +21,6 @@ const keycloakGoogle = getKeyCloakClient({
   }
 })
 
-// keycloack client for account merge poiting to subdomain
-const keycloakMergeGoogle = getKeyCloakClient({
-  resource: envHelper.KEYCLOAK_GOOGLE_CLIENT.clientId,
-  bearerOnly: true,
-  serverUrl: envHelper.PORTAL_MERGE_AUTH_SERVER_URL,
-  realm: envHelper.PORTAL_REALM,
-  credentials: {
-    secret: envHelper.KEYCLOAK_GOOGLE_CLIENT.secret
-  }
-})
-
-
 const keycloakGoogleAndroid = getKeyCloakClient({
   resource: envHelper.KEYCLOAK_GOOGLE_ANDROID_CLIENT.clientId,
   bearerOnly: true,
@@ -115,7 +103,7 @@ class GoogleOauth {
       throw error.message
     } else {
       throw 'unhandled exception while getting tokens'
-    }
+    } 
   }
 }
 const googleOauth = new GoogleOauth()
@@ -156,14 +144,18 @@ const createSession = async (emailId, reqQuery, req, res) => {
     });
     keycloakClient.storeGrant(grant, req, res);
     req.kauth.grant = grant;
-    keycloakClient.authenticated(req)
-    return {
-      access_token: grant.access_token.token,
-      refresh_token: grant.refresh_token.token
-    };
+    return new Promise((resolve, reject) => {
+      keycloakClient.authenticated(req, function (error) {
+        if (error) {
+          logger.info({msg: 'googleauthhelper:createSession error creating session', additionalInfo: error});
+          reject('GOOGLE_CREATE_SESSION_FAILED')
+        } else {
+          resolve({access_token: grant.access_token.token, refresh_token: grant.refresh_token.token})
+        }
+      });
+    })
   }
 }
-
 const fetchUserByEmailId = async (emailId, req) => {
   const options = {
     method: 'GET',

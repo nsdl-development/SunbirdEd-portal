@@ -66,12 +66,23 @@ function getErrorCode (httpCode) {
 }
 
 module.exports = function (express) {
+	var bundles;
   var router = express.Router()
   router.get('/read/:lang?', compression(), (requestObj, responseObj, next) => {
     var lang = requestObj.params['lang'] || envHelper.sunbird_default_language
-
+var identifier = process.env.identifier;
+var resultsofidentifier = JSON.parse(fs.readFileSync('/app/IdentifierList.json'))
+        resultsofidentifier = resultsofidentifier.result;
+		var newArrObj = resultsofidentifier.filter(function(obj) {
+            return obj.identifier == identifier;
+        })
+		
+		if (lang == 'en' && newArrObj.length > 0) {
+            bundles = JSON.parse(fs.readFileSync(newArrObj[0].path))
+        } else {
+            bundles = JSON.parse(fs.readFileSync(path.join(__dirname, '/./../../resourcebundles/json/', lang + '.json')))
+         }
     try {
-      var bundles = JSON.parse(fs.readFileSync(path.join(__dirname, '/./../../resourcebundles/json/', lang + '.json')))
       sendSuccessResponse(responseObj, 'api.resoucebundles.read', bundles, HttpStatus.OK)
     } catch (err) {
       if (err.code === 'ENOENT') {

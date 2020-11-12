@@ -87,7 +87,6 @@ export const Response = {
             'mimeType': 'application/vnd.ekstep.ecml-archive',
             'framework': 'NCFCOPY',
             'contentType': 'Resource'
-
         }
     },
     librarySearchData: {

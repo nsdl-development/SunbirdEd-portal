@@ -23,6 +23,7 @@ export class OfflineDialCodeCardComponent implements OnInit, OnChanges {
   route: string;
   currentRoute: string;
   contentId: string;
+  showAddingToLibraryButton: boolean;
   showModal = false;
   message;
   public telemetryInteractObject: IInteractEventObject;
